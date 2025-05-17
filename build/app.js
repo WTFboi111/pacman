@@ -2083,73 +2083,28 @@ class GameCoordinator {
    * Resets the gameboard and prepares the next level
    */
   advanceLevel() {
-    this.allowPause = false;
-    this.cutscene = true;
-    this.soundManager.setCutscene(this.cutscene);
-    this.allowKeyPresses = false;
-    this.soundManager.stopAmbience();
-
-    this.entityList.forEach((entity) => {
-      const entityRef = entity;
-      entityRef.moving = false;
-    });
-
-    this.removeTimer({ detail: { timer: this.fruitTimer } });
-    this.removeTimer({ detail: { timer: this.ghostCycleTimer } });
-    this.removeTimer({ detail: { timer: this.endIdleTimer } });
-    this.removeTimer({ detail: { timer: this.ghostFlashTimer } });
-
-    const imgBase = 'app/style//graphics/spriteSheets/maze/';
-
-    new Timer(() => {
-      this.ghosts.forEach((ghost) => {
-        const ghostRef = ghost;
-        ghostRef.display = false;
-      });
-
-      this.mazeImg.src = `${imgBase}maze_white.svg`;
-      new Timer(() => {
-        this.mazeImg.src = `${imgBase}maze_blue.svg`;
-        new Timer(() => {
-          this.mazeImg.src = `${imgBase}maze_white.svg`;
-          new Timer(() => {
-            this.mazeImg.src = `${imgBase}maze_blue.svg`;
-            new Timer(() => {
-              this.mazeImg.src = `${imgBase}maze_white.svg`;
-              new Timer(() => {
-                this.mazeImg.src = `${imgBase}maze_blue.svg`;
-                new Timer(() => {
-                  this.mazeCover.style.visibility = 'visible';
-                  new Timer(() => {
-                    this.mazeCover.style.visibility = 'hidden';
-                    this.level += 1;
-                    this.allowKeyPresses = true;
-                    this.entityList.forEach((entity) => {
-                      const entityRef = entity;
-                      if (entityRef.level) {
-                        entityRef.level = this.level;
-                      }
-                      entityRef.reset();
-                      if (entityRef instanceof Ghost) {
-                        entityRef.resetDefaultSpeed();
-                      }
-                      if (
-                        entityRef instanceof Pickup
-                        && entityRef.type !== 'fruit'
-                      ) {
-                        this.remainingDots += 1;
-                      }
-                    });
-                    this.startGameplay();
-                  }, 500);
-                }, 250);
-              }, 250);
-            }, 250);
-          }, 250);
-        }, 250);
-      }, 250);
-    }, 2000);
+    // Остановить игровой движок, если он есть
+    if (this.gameEngine && this.gameEngine.stop) {
+      this.gameEngine.stop();
+    }
+  
+    // Очистить всё содержимое игрового интерфейса (по желанию)
+    document.body.innerHTML = '';
+  
+    // Показать финальную картинку
+    const img = document.createElement('img');
+    img.src = 'https://i.postimg.cc/VLvLRKF1/image.jpg'; // замените на свою картинку
+    img.style.position = 'fixed';
+    img.style.top = 0;
+    img.style.left = 0;
+    img.style.width = '100vw';
+    img.style.height = '100vh';
+    img.style.objectFit = 'cover';
+    img.style.zIndex = 9999;
+  
+    document.body.appendChild(img);
   }
+
 
   /**
    * Flashes ghosts blue and white to indicate the end of the powerup
