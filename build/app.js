@@ -2099,7 +2099,8 @@ class GameCoordinator {
     img.style.left = 0;
     img.style.width = '100vw';
     img.style.height = '100vh';
-    img.style.objectFit = 'cover';
+    img.style.objectFit = 'contain';
+    img.style.backgroundColor = 'black';
     img.style.zIndex = 9999;
   
     document.body.appendChild(img);
