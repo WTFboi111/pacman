@@ -2082,29 +2082,48 @@ class GameCoordinator {
   /**
    * Resets the gameboard and prepares the next level
    */
-  advanceLevel() {
-    // Остановить игровой движок, если он есть
+   advanceLevel() {
     if (this.gameEngine && this.gameEngine.stop) {
       this.gameEngine.stop();
     }
   
-    // Очистить всё содержимое игрового интерфейса (по желанию)
+    // Удаляем всё со страницы
     document.body.innerHTML = '';
+    document.documentElement.style.margin = '0';
+    document.documentElement.style.padding = '0';
+    document.body.style.margin = '0';
+    document.body.style.padding = '0';
+    document.body.style.overflow = 'hidden';
   
-    // Показать финальную картинку
+    // Массив ссылок на картинки
+    const images = [
+      'https://i.postimg.cc/Hs5cXp4X/image.jpg',
+      'https://i.postimg.cc/bvYs71X9/image.jpg',
+      'https://i.postimg.cc/G28hRQXG/3.jpg',
+      'https://i.postimg.cc/Kvrcm4Dq/1.jpg',
+      'https://i.postimg.cc/pdyPQCb4/2.jpg',
+      'https://i.postimg.cc/zXjN96q4/4.jpg',
+    ];
+  
+    // Выбираем случайную
+    const randomIndex = Math.floor(Math.random() * images.length);
+    const selectedImage = images[randomIndex];
+  
+    // Показываем изображение
     const img = document.createElement('img');
-    img.src = 'https://i.postimg.cc/VLvLRKF1/image.jpg'; // замените на свою картинку
+    img.src = selectedImage;
     img.style.position = 'fixed';
-    img.style.top = 0;
-    img.style.left = 0;
+    img.style.top = '0';
+    img.style.left = '0';
     img.style.width = '100vw';
     img.style.height = '100vh';
+    img.style.zIndex = '9999';
     img.style.objectFit = 'contain';
     img.style.backgroundColor = 'black';
-    img.style.zIndex = 9999;
   
     document.body.appendChild(img);
   }
+  
 
 
   /**
